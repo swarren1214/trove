@@ -3,7 +3,7 @@ import UIKit
 
 /// The moment after a scan, while Trove reads it on the device.
 ///
-/// 1. Reading: the page floats in the middle with a jade glow running around its edge (Apple
+/// 1. Reading: the page floats in the middle with a blue glow running around its edge (Apple
 ///    Intelligence's edge light, in Trove's color), a soft beam sweeps down the page, and each
 ///    line of text Vision finds lights up where it is on the page.
 /// 2. Found: the glow settles, the page eases up, and what Trove read drops in underneath as
@@ -93,7 +93,7 @@ struct ReadingView: View {
             .accessibilityHidden(true)
     }
 
-    /// The edge light: a jade-to-mint gradient that runs around the page while reading, and
+    /// The edge light: a blue-to-aqua gradient that runs around the page while reading, and
     /// holds still once it's done.
     private func glow(_ shape: RoundedRectangle) -> some View {
         TimelineView(.animation(paused: !isReading || reduceMotion)) { context in
@@ -101,7 +101,7 @@ struct ReadingView: View {
             shape
                 .strokeBorder(
                     AngularGradient(
-                        colors: [Brand.jade, Color(hex: 0x7FE3C9), .white, Color(hex: 0x2E8C7C), Color(hex: 0xA6F0DC), Brand.jade],
+                        colors: [Brand.sky, Color(hex: 0x8FE3F7), .white, Color(hex: 0x1C9DC4), Color(hex: 0xB8EEFB), Brand.sky],
                         center: .center,
                         angle: .degrees(turn * 360)
                     ),
@@ -116,7 +116,7 @@ struct ReadingView: View {
             let progress = context.date.timeIntervalSince(start).truncatingRemainder(dividingBy: 1.8) / 1.8
             GeometryReader { geo in
                 LinearGradient(
-                    colors: [.clear, Color(hex: 0x7FE3C9).opacity(0.55), .white.opacity(0.35), .clear],
+                    colors: [.clear, Color(hex: 0x8FE3F7).opacity(0.55), .white.opacity(0.35), .clear],
                     startPoint: .top,
                     endPoint: .bottom
                 )
@@ -133,8 +133,8 @@ struct ReadingView: View {
         GeometryReader { geo in
             ForEach(Array(boxes.prefix(shownBoxes).enumerated()), id: \.offset) { _, box in
                 RoundedRectangle(cornerRadius: 3, style: .continuous)
-                    .fill(Color(hex: 0x7FE3C9).opacity(0.28))
-                    .overlay(RoundedRectangle(cornerRadius: 3, style: .continuous).strokeBorder(Color(hex: 0x2E8C7C).opacity(0.55), lineWidth: 1))
+                    .fill(Color(hex: 0x8FE3F7).opacity(0.28))
+                    .overlay(RoundedRectangle(cornerRadius: 3, style: .continuous).strokeBorder(Color(hex: 0x1C9DC4).opacity(0.55), lineWidth: 1))
                     .frame(width: box.width * geo.size.width + 4, height: box.height * geo.size.height + 3)
                     .position(x: box.midX * geo.size.width, y: box.midY * geo.size.height)
                     .transition(.opacity.combined(with: .scale(scale: 0.92)))
@@ -179,7 +179,7 @@ struct ReadingView: View {
                     .lineLimit(1)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
-                    .glassEffect(.regular.tint(Brand.jade.opacity(0.18)), in: .capsule)
+                    .glassEffect(.regular.tint(Brand.sky.opacity(0.18)), in: .capsule)
                     .transition(reduceMotion ? .opacity : .asymmetric(
                         insertion: .scale(scale: 0.6).combined(with: .opacity).combined(with: .offset(y: -18)),
                         removal: .opacity

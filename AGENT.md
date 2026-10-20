@@ -54,7 +54,7 @@ screen and in Split View, Slide Over and Stage Manager windows, and portrait and
   as in every Hearth app. iPad's sidebar shows both (see "iPad sidebar").
 - Sharing a file Trove makes uses `ShareLink` with a `Transferable` (`PDFExport`), never a
   hand-wrapped share sheet.
-- Screens draw the Hearth color header (`HeaderGradient`, in Trove's jade) through
+- Screens draw the Hearth color header (`HeaderGradient`, in Trove's blue) through
   `TroveScreen`: a large white title for tabs, a small centered title for details. On iPhone
   the color fades over about half the screen, on iPad an even fade over about 40%.
 

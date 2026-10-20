@@ -174,7 +174,7 @@ struct SecureValue: View {
 }
 
 /// The big card at the top of a document: its type and title, who it belongs to, and its dates,
-/// over the first scan (blurred) or the jade.
+/// over the first scan (blurred) or the blue.
 struct DocumentHeroCard: View {
     var document: TroveDocument
     var ownerName: String

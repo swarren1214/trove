@@ -29,7 +29,7 @@ extension View {
         toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 // White icons, also in the "…" menu if the bar runs out of room (the app's tint
-                // is jade, which would make menu icons jade beside white text).
+                // is blue, which would make menu icons blue beside white text).
                 actions().tint(.white)
                 if showsProfile {
                     ProfileButton()

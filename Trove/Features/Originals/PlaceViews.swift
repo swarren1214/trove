@@ -221,7 +221,7 @@ struct PlaceDetailView: View {
                         Spacer()
                         Button("Everything’s There") { store.confirmPlace(place.id) }
                             .buttonStyle(.borderedProminent)
-                            .tint(Brand.jade)
+                            .tint(Brand.sky)
                             .disabled(documents.isEmpty)
                     }
                 }

@@ -13,7 +13,7 @@ struct TroveApp: App {
         // The vault syncs in the Hearth household's iCloud: its zone registers with the
         // household before the household starts (AppRoot's task).
         TroveStore.shared.prepare()
-        // Alerts use the system label color rather than the jade. Destructive buttons stay red.
+        // Alerts use the system label color rather than the blue. Destructive buttons stay red.
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = .label
         AppLock.shared.lockIfEnabled()
         Reminders.start()
@@ -54,12 +54,12 @@ struct AppRoot: View {
                 OnboardingView()
             }
         }
-        .tint(Brand.jade)
+        .tint(Brand.sky)
         .animation(.smooth, value: onboarded)
         // Hearth household invitations (the one invite for everything, the vault included).
         .hearthHouseholdInvitations()
         // Trove always works inside a household (a household of one is fine).
-        .hearthHouseholdRequired(isActive: onboarded, accent: Brand.jade)
+        .hearthHouseholdRequired(isActive: onboarded, accent: Brand.sky)
         // Trove's side of a person's page in Household: their documents.
         .environment(\.hearthPersonExtras, { person in AnyView(TrovePersonExtras(person: person)) })
         .task {
@@ -158,11 +158,11 @@ enum CoverWindow {
     }
 }
 
-/// What the app switcher shows: the jade, the Trove mark, nothing else.
+/// What the app switcher shows: the blue, the Trove mark, nothing else.
 private struct PrivacyCover: View {
     var body: some View {
         ZStack {
-            Brand.jadeDeep.ignoresSafeArea()
+            Brand.skyDeep.ignoresSafeArea()
             Image(systemName: "archivebox.fill")
                 .font(.system(size: 54, weight: .semibold))
                 .foregroundStyle(.white.opacity(0.9))
@@ -182,7 +182,7 @@ struct LockView: View {
                 .font(.system(size: 44, weight: .semibold))
                 .foregroundStyle(.white)
                 .frame(width: 92, height: 92)
-                .background(Brand.jade, in: .rect(cornerRadius: 22, style: .continuous))
+                .background(Brand.sky, in: .rect(cornerRadius: 22, style: .continuous))
                 .accessibilityHidden(true)
             Text("Trove is locked")
                 .font(.largeTitle.bold())
@@ -201,7 +201,7 @@ struct LockView: View {
         }
         .frame(maxWidth: .infinity)
         .background(Color(.systemBackground))
-        .tint(Brand.jade)
+        .tint(Brand.sky)
         .task { await lock.unlock() }
     }
 }

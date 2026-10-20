@@ -21,7 +21,7 @@ struct SheetDoneButton: View {
         Button(title, systemImage: "checkmark", role: .confirm, action: action)
             .labelStyle(.iconOnly)
             .buttonStyle(.glassProminent)
-            .tint(Brand.jade)
+            .tint(Brand.sky)
     }
 }
 

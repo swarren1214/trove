@@ -172,7 +172,7 @@ struct DocumentDetailView: View {
                         Spacer(minLength: 8)
                         Button("Still There") { store.confirmOriginal(document.id) }
                             .buttonStyle(.bordered)
-                            .tint(Brand.jade)
+                            .tint(Brand.sky)
                             .font(.subheadline.weight(.semibold))
                     }
                 } else if document.noOriginal {
@@ -190,7 +190,7 @@ struct DocumentDetailView: View {
                         Spacer(minLength: 8)
                         Button("Choose") { choosingPlace = true }
                             .buttonStyle(.borderedProminent)
-                            .tint(Brand.jade)
+                            .tint(Brand.sky)
                             .font(.subheadline.weight(.semibold))
                     }
                 }

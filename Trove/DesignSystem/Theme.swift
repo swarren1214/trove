@@ -30,24 +30,22 @@ nonisolated enum SettingsKey {
     }
 }
 
-/// Trove's colors: a deep jade, from the Trove canvas. The jade carries white text; the lighter
-/// jade is its ink in Dark Mode.
+/// Trove's colors: a bright sky blue (#38C2E9). It fills buttons, the header and icon squares.
+/// It's too light for small text on white, so text and icons in the app's color use `ink`.
 nonisolated enum Brand {
     /// Buttons, the selected tab, the confirm button on sheets.
-    static let jade = Color(uiColor: UIColor { traits in
-        traits.userInterfaceStyle == .dark ? UIColor(hex: 0x2E8C7C) : UIColor(hex: 0x1E6E62)
-    })
-    /// Top of the header gradient.
-    static let jadeDeep = Color(hex: 0x175A50)
+    static let sky = Color(hex: 0x38C2E9)
+    /// Top of the header gradient: a deeper blue, so the white title and icons read on it.
+    static let skyDeep = Color(hex: 0x1C9DC4)
     /// Middle of the header gradient.
-    static let jadeMid = Color(hex: 0x24806F)
-    /// Text and icons in the app's color: deep jade on light, a lighter jade on dark.
+    static let skyMid = Color(hex: 0x38C2E9)
+    /// Text and icons in the app's color: a deep blue on light (4.9:1 on white), a pale blue on dark.
     static let ink = Color(uiColor: UIColor { traits in
-        traits.userInterfaceStyle == .dark ? UIColor(hex: 0x4FBFAE) : UIColor(hex: 0x17594F)
+        traits.userInterfaceStyle == .dark ? UIColor(hex: 0x6FD6F2) : UIColor(hex: 0x0F7A9C)
     })
-    /// The soft jade behind icons.
+    /// The soft blue behind icons.
     static let tint = Color(uiColor: UIColor { traits in
-        traits.userInterfaceStyle == .dark ? UIColor(hex: 0x1E6E62).withAlphaComponent(0.32) : UIColor(hex: 0xE1EFEC)
+        traits.userInterfaceStyle == .dark ? UIColor(hex: 0x38C2E9).withAlphaComponent(0.28) : UIColor(hex: 0xDFF4FB)
     })
     static let secondaryText = Color(.secondaryLabel)
 }

@@ -15,7 +15,7 @@ struct OnboardingView: View {
                         .font(.system(size: 38, weight: .semibold))
                         .foregroundStyle(.white)
                         .frame(width: 76, height: 76)
-                        .background(Brand.jade, in: .rect(cornerRadius: 18, style: .continuous))
+                        .background(Brand.sky, in: .rect(cornerRadius: 18, style: .continuous))
                         .accessibilityHidden(true)
                     Text("Welcome to Trove")
                         .font(.largeTitle.bold())

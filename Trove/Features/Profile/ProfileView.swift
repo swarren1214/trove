@@ -45,7 +45,7 @@ struct ProfileView: View {
                     }
                     // The people (added and edited only here), inviting the family, and who's
                     // using this device. The vault is shared with the household's adults.
-                    NavigationLink { HearthHouseholdView(accent: Brand.jade) } label: {
+                    NavigationLink { HearthHouseholdView(accent: Brand.sky) } label: {
                         ProfileRow(
                             symbol: HearthHouseholdLabel.symbol,
                             color: Color(hex: 0x7B61FF),
@@ -78,12 +78,12 @@ struct ProfileView: View {
                     // Native sharing; the PDF is made (after Face ID) only when someone picks where
                     // it goes. Always free: it's your own data.
                     ShareLink(item: TroveExport.everything(store: store), preview: SharePreview("Trove export")) {
-                        ProfileRow(symbol: "square.and.arrow.up", color: Brand.jade, title: "Export Everything", value: "PDF")
+                        ProfileRow(symbol: "square.and.arrow.up", color: Brand.sky, title: "Export Everything", value: "PDF")
                     }
                     .disabled(store.documents.isEmpty)
                     Divider().padding(.leading, 60)
                     NavigationLink { AboutView() } label: {
-                        ProfileRow(symbol: "info.circle", color: Brand.jade, title: "About Trove", value: "v\(AppConfig.version)")
+                        ProfileRow(symbol: "info.circle", color: Brand.sky, title: "About Trove", value: "v\(AppConfig.version)")
                     }
                 }
                 .buttonStyle(.plain)
@@ -145,7 +145,7 @@ struct ProfileView: View {
         // Your details live in the household, for every Hearth app.
         .sheet(isPresented: $editingMe) {
             if let me = household.me {
-                HearthPersonEditor(member: me, accent: Brand.jade)
+                HearthPersonEditor(member: me, accent: Brand.sky)
             }
         }
         .alert(store.isInFamilyVault ? "Leave the Household?" : "Erase App Data?", isPresented: $confirmsErase) {

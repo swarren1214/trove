@@ -21,7 +21,7 @@ struct PeopleView: View {
                     Text("Open Profile").font(.headline).frame(maxWidth: .infinity, minHeight: 34)
                 }
                 .buttonStyle(.glassProminent)
-                .tint(Brand.jade)
+                .tint(Brand.sky)
             } else {
                 switcher
                 if let selected {
@@ -235,7 +235,7 @@ struct CompletenessRing: View {
             Circle().stroke(Color(.systemGray5), lineWidth: 5)
             Circle()
                 .trim(from: 0, to: progress)
-                .stroke(Brand.jade, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                .stroke(Brand.sky, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                 .rotationEffect(.degrees(-90))
             Text("\(done)/\(total)")
                 .font(.caption.weight(.semibold))

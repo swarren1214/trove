@@ -1,10 +1,10 @@
 import SwiftUI
 
-// The pieces every Trove screen is built from, matching the Trove canvas: the jade header that
+// The pieces every Trove screen is built from, matching the Trove canvas: the blue header that
 // fades into the gray background (the Hearth color header), white 22 pt cards, small tinted
 // icon tiles, and the urgency chips.
 
-/// The jade header that fades into the gray background. Fixed behind the scroll view. Every
+/// The blue header that fades into the gray background. Fixed behind the scroll view. Every
 /// Hearth app draws the same header in its own color.
 struct HeaderGradient: View {
     /// How far down the screen the color reaches before it's gone, as a share of the screen's
@@ -17,8 +17,8 @@ struct HeaderGradient: View {
         // On iPhone the color holds longer before it fades (eased), so it reads stronger in the
         // shorter space; on iPad, an even fade from the very top to the very bottom.
         let curve = sizeClass == .compact ? Self.phoneCurve : Self.evenCurve
-        let start = Brand.jadeDeep
-        let end = Brand.jadeMid
+        let start = Brand.skyDeep
+        let end = Brand.skyMid
         GeometryReader { geo in
             LinearGradient(
                 stops: curve.map { point in
@@ -40,7 +40,7 @@ struct HeaderGradient: View {
     private static let evenCurve: [(location: Double, opacity: Double)] = [(0, 1), (1, 0)]
 }
 
-/// A screen with the jade header: an optional small line above a big white title, an optional
+/// A screen with the blue header: an optional small line above a big white title, an optional
 /// line under it, then cards. Toolbar items come from the caller. On iPad the content keeps to a
 /// readable column while the color runs edge to edge.
 struct TroveScreen<Content: View>: View {
@@ -85,7 +85,7 @@ struct TroveScreen<Content: View>: View {
                                 .opacity(0.85)
                         }
                     }
-                    // A touch softer in Light Mode, where pure white over the lighter jade glares.
+                    // A touch softer in Light Mode, where pure white over the lighter blue glares.
                     .foregroundStyle(.white.opacity(colorScheme == .light ? 0.92 : 1))
                     .padding(.horizontal, 4)
                 }
@@ -208,7 +208,7 @@ extension SectionTitle where Trailing == EmptyView {
     }
 }
 
-/// A symbol on a soft rounded square: jade by default, or an urgency's colors.
+/// A symbol on a soft rounded square: blue by default, or an urgency's colors.
 struct IconTile: View {
     var symbol: String
     var size: CGFloat = 36
@@ -266,7 +266,7 @@ struct TintedCapsuleButton: View {
     }
 }
 
-/// The wide jade button at the bottom of a screen ("Scan a document").
+/// The wide blue button at the bottom of a screen ("Scan a document").
 struct PrimaryButton: View {
     var title: String
     var systemImage: String?
@@ -284,7 +284,7 @@ struct PrimaryButton: View {
         }
         .buttonStyle(.glassProminent)
         .controlSize(.large)
-        .tint(Brand.jade)
+        .tint(Brand.sky)
     }
 }
 

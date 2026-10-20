@@ -89,7 +89,7 @@ struct OriginalsView: View {
 
     private var emergencyPacketLabel: some View {
         HStack(spacing: 12) {
-            IconTile(symbol: "cross.case", size: 40, foreground: .white, background: Brand.jade, circle: true)
+            IconTile(symbol: "cross.case", size: 40, foreground: .white, background: Brand.sky, circle: true)
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 6) {
                     Text("Emergency packet").font(.headline).foregroundStyle(.primary)

@@ -280,7 +280,7 @@ nonisolated struct HearthAppInfo: Sendable {
         // Not on TestFlight yet: the page doesn't list Trove (see `order`).
         availability: .testFlight(URL(string: "https://hearthapps.com")!),
         symbol: "archivebox",
-        colorHex: 0x1E6E62, inkHex: 0x17594F, liteHex: 0x4FBFAE
+        colorHex: 0x38C2E9, inkHex: 0x0F7A9C, liteHex: 0x6FD6F2
     )
 }
 

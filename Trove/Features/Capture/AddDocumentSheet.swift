@@ -369,7 +369,7 @@ struct CapturedPage: Identifiable {
     }
 }
 
-/// One way to add pages: a jade icon square, a title and a quiet line, like a Settings row.
+/// One way to add pages: a blue icon square, a title and a quiet line, like a Settings row.
 private struct SourceRow: View {
     var symbol: String
     var title: String
@@ -381,7 +381,7 @@ private struct SourceRow: View {
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(.white)
                 .frame(width: 32, height: 32)
-                .background(Brand.jade, in: .rect(cornerRadius: 8, style: .continuous))
+                .background(Brand.sky, in: .rect(cornerRadius: 8, style: .continuous))
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 1) {
                 Text(title)
