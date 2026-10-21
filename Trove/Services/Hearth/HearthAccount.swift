@@ -4,7 +4,8 @@
 //
 // Canonical copy: ~/Developer/hearthkit/HearthAccount.swift. Don't edit the copies inside the
 // apps; edit this one and run ~/Developer/hearthkit/sync.sh. Needs HearthShared.swift and
-// HearthApps.swift (for `HearthApp`, its colors, `HearthAppIcon` and `HearthMark`).
+// HearthApps.swift (for `HearthApp`, its colors, `HearthAppIcon` and `HearthMark`), and in Debug
+// builds HearthPurchases.swift (for the Copy RevenueCat ID row).
 //
 // Using it
 // - Each app passes who's signed in (nil when no one is), its own Sign in with Apple button (which
@@ -100,7 +101,7 @@ struct HearthAccountSection<SignInButton: View, Rows: View>: View {
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: 26, style: .continuous)
-        Group {
+        VStack(alignment: .leading, spacing: 18) {
             if let profile {
                 signedIn(profile)
                     .transition(.opacity.combined(with: .scale(scale: 0.98, anchor: .top)))
@@ -108,6 +109,9 @@ struct HearthAccountSection<SignInButton: View, Rows: View>: View {
                 signedOut
                     .transition(.opacity.combined(with: .scale(scale: 0.98, anchor: .top)))
             }
+            #if DEBUG
+            HearthRevenueCatIDRow()
+            #endif
         }
         .padding(.horizontal, 16)
         .padding(.top, 20)
