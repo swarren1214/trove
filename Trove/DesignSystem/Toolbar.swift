@@ -1,23 +1,10 @@
 import SwiftUI
 
-/// The person's photo (or initial) at the top right of every screen. Opens Profile.
-///
-/// Drawn as a live view, not an image: the toolbar repaints images in one flat color, which
-/// would turn a photo into a plain white circle.
+/// The person's photo at the top right of every screen: the shared Hearth profile button
+/// (HearthProfile.swift), the same in every Hearth app. Opens the Profile sheet.
 struct ProfileButton: View {
-    @State private var household = HearthHouseholdStore.shared
-
     var body: some View {
-        NavigationLink(value: Destination.profile) {
-            if let me = household.me {
-                HearthMemberAvatar(member: me, size: 30, ring: false)
-            } else {
-                Image(systemName: "person.crop.circle.fill")
-                    .font(.title2)
-                    .foregroundStyle(.white)
-            }
-        }
-        .accessibilityLabel("Profile")
+        HearthProfileButton()
     }
 }
 

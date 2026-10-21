@@ -18,9 +18,15 @@ struct TroveApp: App {
         AppLock.shared.lockIfEnabled()
         Reminders.start()
         // Trove Plus and Hearth+ (RevenueCat). Nothing is set up until the real key is in
-        // AppConfig. Trove has no Hearth server account, so there's no access token.
+        // AppConfig. Trove has no API client of its own: it uses the shared sign-in's token
+        // while it's good (never refreshing it), for the household's plan.
         if AppConfig.revenueCatAPIKey != AppConfig.revenueCatPlaceholder {
-            HearthPurchases.shared.configure(app: .trove, apiKey: AppConfig.revenueCatAPIKey, apiBaseURL: AppConfig.apiBaseURL)
+            HearthPurchases.shared.configure(
+                app: .trove,
+                apiKey: AppConfig.revenueCatAPIKey,
+                apiBaseURL: AppConfig.apiBaseURL,
+                accessToken: { HearthAccounts.currentAccessToken() }
+            )
         }
     }
 
@@ -35,7 +41,7 @@ struct TroveApp: App {
     }
 }
 
-/// The welcome screen the first time, the tabs after that, and the covers: Face ID when locked,
+/// Onboarding the first time, the tabs after that, and the covers: Face ID when locked,
 /// a blur in the app switcher.
 struct AppRoot: View {
     @Environment(\.scenePhase) private var scenePhase

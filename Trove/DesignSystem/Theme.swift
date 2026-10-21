@@ -3,7 +3,7 @@ import UIKit
 
 /// Keys for settings stored with @AppStorage. Keep every key here so views stay in sync.
 nonisolated enum SettingsKey {
-    /// The welcome screen has been finished.
+    /// Onboarding has been finished.
     static let onboarded = "onboarding.done"
     /// Ask for Face ID when Trove opens (Profile › Lock with Face ID). On by default: Trove holds
     /// the most sensitive things in any Hearth app.
@@ -18,6 +18,9 @@ nonisolated enum SettingsKey {
     static let appleUserID = "account.appleUserID"
     static let appleName = "account.appleName"
     static let appleEmail = "account.appleEmail"
+    /// The kinds of documents picked in onboarding ("What should Trove keep?"), as
+    /// `DocumentType` raw values joined by commas: Home's "Start with" list. Empty uses the usual ones.
+    static let firstDocuments = "onboarding.firstDocuments"
 
     /// Defaults for settings that start on.
     static func registerDefaults() {

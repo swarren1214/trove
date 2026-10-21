@@ -31,8 +31,9 @@
 // - The section sizes and clips the button (a 52 pt capsule), so pass the bare
 //   SignInWithAppleButton with its style for the color scheme (.white in dark, .black in light).
 // - `rows` is optional; each row is separated by a hairline. Use `HearthAccountRow` for the label.
-// - Leave `onDeleteAccount` nil for apps with no server account (Caloma, Hearken keep everything in
-//   iCloud), and `onSignOut` nil where signing out isn't offered.
+// - Pass `onDeleteAccount` whenever the person is signed in to a Hearth account (it calls the API's
+//   `DELETE /v1/me`, which deletes the account for every Hearth app). Leave it nil when there's no
+//   server account (Caloma, or an anonymous session), and `onSignOut` nil where signing out isn't offered.
 
 import SwiftUI
 import UIKit
@@ -62,6 +63,23 @@ nonisolated struct HearthAccountProfile: Equatable, Sendable {
 }
 
 // MARK: - The section
+
+/// Who's signed in, shown the same way in every Hearth app.
+@MainActor
+enum HearthAccountIdentity {
+    /// Their household name, else what the app knows.
+    static func name(_ profile: HearthAccountProfile) -> String? {
+        let household = HearthHouseholdStore.shared.me?.trimmedName ?? ""
+        return household.isEmpty ? profile.name : household
+    }
+
+    /// The Hearth account's email (what Sign in with Apple gave the account, which may be a
+    /// private relay address), else what the app knows.
+    static func email(_ profile: HearthAccountProfile) -> String? {
+        let shared = HearthAccounts.session()?.email?.trimmingCharacters(in: .whitespaces) ?? ""
+        return shared.isEmpty ? profile.email : shared
+    }
+}
 
 struct HearthAccountSection<SignInButton: View, Rows: View>: View {
     let app: HearthApp
@@ -142,7 +160,7 @@ struct HearthAccountSection<SignInButton: View, Rows: View>: View {
                         .font(.footnote.weight(.semibold))
                         .textCase(.uppercase)
                         .tracking(0.6)
-                        .foregroundStyle(info.ink)
+                        .foregroundStyle(.secondary)
                     Text("Not signed in")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
@@ -188,10 +206,10 @@ struct HearthAccountSection<SignInButton: View, Rows: View>: View {
             HStack(spacing: 14) {
                 HearthAccountAvatar(app: app, profile: profile, size: 60)
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(profile.name ?? "Your Hearth Account")
+                    Text(HearthAccountIdentity.name(profile) ?? "Your Hearth Account")
                         .font(.title3.bold())
                         .lineLimit(2)
-                    if let email = profile.email {
+                    if let email = HearthAccountIdentity.email(profile) {
                         Text(email)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
@@ -203,7 +221,7 @@ struct HearthAccountSection<SignInButton: View, Rows: View>: View {
                     } icon: {
                         Image(systemName: "checkmark")
                             .fontWeight(.bold)
-                            .foregroundStyle(info.ink)
+                            .foregroundStyle(.secondary)
                     }
                     .labelStyle(HearthAccountTightLabel())
                     .font(.footnote)
@@ -313,7 +331,7 @@ struct HearthAccountSection<SignInButton: View, Rows: View>: View {
             Button {
                 openURL(other.info.getURL)
             } label: {
-                tileContent(other, status: Text(onAppStore ? "Get" : "Beta").fontWeight(.semibold).foregroundStyle(info.ink), dimmed: true)
+                tileContent(other, status: Text(onAppStore ? "Get" : "Beta").fontWeight(.semibold).foregroundStyle(Color.primary), dimmed: true)
             }
             .buttonStyle(.plain)
             .accessibilityLabel(onAppStore ? "Get \(other.displayName) on the App Store" : "Join the \(other.displayName) beta")
@@ -373,7 +391,7 @@ struct HearthAccountRow: View {
             if let systemImage {
                 Image(systemName: systemImage)
                     .font(.body)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
                     .frame(width: 24)
                     .accessibilityHidden(true)
             }
@@ -399,11 +417,18 @@ struct HearthAccountRow: View {
 
 // MARK: - Avatar
 
-/// The signed-in person's photo, another Hearth app's photo of them, or their initial.
+/// The signed-in person's photo: the one set on them in the Hearth household when there is one,
+/// otherwise the app's own photo, another Hearth app's photo of them, or their initial.
 struct HearthAccountAvatar: View {
     let app: HearthApp
     let profile: HearthAccountProfile
     var size: CGFloat = 60
+
+    /// "Me" in the household: every Hearth app shows this same photo.
+    private var householdImage: UIImage? {
+        guard let name = HearthHouseholdStore.shared.me?.photo else { return nil }
+        return Hearth.photo(named: name).flatMap(UIImage.init(data:))
+    }
 
     private var ownImage: UIImage? {
         profile.photo.flatMap(UIImage.init(data:))
@@ -415,9 +440,21 @@ struct HearthAccountAvatar: View {
         return Hearth.sharedPhoto(forName: name, excluding: app).flatMap(UIImage.init(data:))
     }
 
+    /// Someone in the household: their household photo is the only one (or their initial).
+    /// Without one, this app's own photo, then any other Hearth app's.
+    private var isInHousehold: Bool { HearthHouseholdStore.shared.me != nil }
+
     var body: some View {
         Group {
-            if let image = ownImage {
+            if isInHousehold {
+                if let image = householdImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                } else {
+                    placeholder
+                }
+            } else if let image = ownImage {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
@@ -440,12 +477,31 @@ struct HearthAccountAvatar: View {
         .frame(width: size, height: size)
         .clipShape(.circle)
         .accessibilityHidden(true)
+        .task(id: adoptionKey) { await adoptOlderPhoto() }
+    }
+
+    private var adoptionKey: String {
+        "\(HearthHouseholdStore.shared.cloudLoaded)|\(HearthHouseholdStore.shared.me?.id ?? "")|\(profile.photo?.count ?? 0)|\(profile.photoURL?.absoluteString ?? "")"
+    }
+
+    /// Photos used to live in each app (Hearken's profile photo, BigTable's server avatar). The
+    /// first one found for someone with no household photo becomes it, in every app; after that
+    /// only choosing a new photo changes it.
+    private func adoptOlderPhoto() async {
+        let store = HearthHouseholdStore.shared
+        guard let me = store.me, me.photo == nil else { return }
+        if let data = profile.photo, store.adoptPhoto(data, for: me.id) { return }
+        guard let url = profile.photoURL,
+              let (data, response) = try? await URLSession.shared.data(from: url),
+              (response as? HTTPURLResponse)?.statusCode == 200,
+              UIImage(data: data) != nil else { return }
+        store.adoptPhoto(data, for: me.id)
     }
 
     @ViewBuilder
     private var placeholder: some View {
         Group {
-            if let initial = profile.name?.first {
+            if let initial = HearthAccountIdentity.name(profile)?.first {
                 Text(String(initial).uppercased())
                     .font(.system(size: size * 0.4, weight: .bold, design: .rounded))
                     .foregroundStyle(app.info.ink)

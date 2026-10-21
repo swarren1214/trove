@@ -32,6 +32,50 @@ screen and in Split View, Slide Over and Stage Manager windows, and portrait and
   (DesignSystem/ChoicePopover.swift). Selection lists in forms (`PlaceChoices`) also put the
   checkmark on the right.
 
+## App color
+
+The app's color (its accent, which the root `.tint` passes to everything below it) is for things
+large or bold enough to stay legible in it. It's never for menus or running text.
+
+- **The app's color is fine for:**
+  - Large titles and big numbers (`.largeTitle`, `.title` and up, a hero figure or a stat).
+  - Icons that stand on their own: an icon tile with a white glyph, a large feature or empty-state
+    symbol, the selected tab on the iPhone tab bar.
+  - Components: toggles, sliders, steppers' fills, progress bars and rings, charts, selection
+    highlights, the filled `SheetDoneButton`, and filled or prominent buttons with white text.
+- **Never use the app's color for:**
+  - Menus: a menu's button or label, its items, their icons and their checkmarks (see the menu
+    rules above).
+  - A menu-style `Picker`'s value (the "Stars ⌃⌄" beside a row's title).
+  - Standard text: body, callout, subheadline, footnote and caption text, links, and buttons whose
+    label is text, such as an action row in a `Form` or `List`.
+  - Headers: section headers, list headers and small all-caps labels.
+  - Small icons: a symbol beside a row's title, inside a `Label`, inline with text, or in a
+    small toolbar or row button.
+  These use the text color: `.primary` (black in Light Mode, white in Dark Mode), or `.secondary`
+  for supporting text and small icons that aren't part of a button (see
+  the next rule). A destructive action stays red.
+- **A button's icon is always the same color as its text**, unless Steve explicitly asks for an
+  exception. This covers every tappable thing with a label: `Button`, `Link`, `ShareLink`,
+  `PhotosPicker`, a `Menu`'s label, and a tappable row (`NavigationLink` or `Button`) in a `List`
+  or `Form`. Text in the text color gets an icon in the text color, a destructive button's text
+  and icon are both red, and a filled button's text and icon are both white. Never color the icon
+  on its own: no `.foregroundStyle` on just the `Image`, no `LabelStyle` that tints or greys the
+  icon, and no row icon left to pick up the app's color from the root `.tint` while its title
+  stays in the text color (put `.tint(.primary)` on the row or its `Section`). A filled icon tile
+  (a white glyph on a colored square, as in the Settings app) is a component, not the button's
+  icon, and is fine.
+- **Approved exceptions** (Steve asked for these; keep them): the iCloud Sync card's Sync Now
+  button (`HearthSyncCard` in HearthSync.swift) is a bordered capsule with a light wash of the
+  app's color and its icon and text in the app's color.
+- The root `.tint` leaks the app's color into every control that doesn't set its own color. So
+  put `.tint(.primary)` on a `Menu`, a menu-style `Picker`, and a text `Button` in a `Form` or
+  `List` row. Never use `.foregroundStyle` with the app's color (or `.tint`/`Color.accentColor`)
+  on text or small symbols.
+- Even where it's allowed, use the app's color only where it stays legible against what's behind
+  it in both Light and Dark Mode. A dark accent on a dark background, a light accent on white, or
+  the accent on an accent-tinted fill all fail. When in doubt, use the text color.
+
 ## Sheet buttons
 
 - A sheet with both Done and Cancel at the top (Save, Add and Create count as Done) uses
@@ -49,7 +93,9 @@ screen and in Split View, Slide Over and Stage Manager windows, and portrait and
   actions and the profile avatar (`ProfileButton`) share one Liquid Glass capsule at the top
   right, the avatar always last so it's always in the same place. Never a second glass bubble
   for the avatar, and no button that only repeats a tab (Household is the People tab and
-  Profile › Household). Icons are white over the color header. Profile itself has no avatar.
+  Profile › Household). Icons are white over the color header. `ProfileButton` is the shared
+  `HearthProfileButton` (HearthProfile.swift): the household photo of "me", opening the shared
+  Profile sheet (`.hearthProfile { ProfileView() }` on RootTabView). Profile itself has no avatar.
 - The iPhone tab bar shows icons only, no names under them (VoiceOver still reads the names),
   as in every Hearth app. iPad's sidebar shows both (see "iPad sidebar").
 - Sharing a file Trove makes uses `ShareLink` with a `Transferable` (`PDFExport`), never a
@@ -88,8 +134,15 @@ native does the job, and match the system's look and behavior when you do.
 
 When an action needs confirming (deleting, erasing, signing out, leaving), always use a native
 alert (`.alert` with a `role: .destructive` button and a Cancel button) rather than a native
-popup or popover (`.confirmationDialog`, action sheet, `.popover`), unless explicitly told
-otherwise.
+popup or popover (`.confirmationDialog`, action sheet, `.popover`, a custom card or sheet),
+unless explicitly told otherwise.
+
+- **Alert button colors:** every button in an alert uses the standard text color (black in
+  Light Mode, white in Dark Mode), never the app's color. Only a destructive action's button
+  is different: the standard red, from `role: .destructive`. The app sets this once at launch
+  with `UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor =
+  .label`; don't tint alert buttons yourself, and don't color a destructive button any other
+  way than its role.
 
 ## Hearth household
 
@@ -175,6 +228,13 @@ Documents, scans, places, reminders, Face ID, household sharing and export are a
 These are copies: in `Services/Hearth/`, `HearthShared.swift`, `HearthApps.swift`,
 `HearthSync.swift`, `HearthPicker.swift`, `HearthIconLibrary.swift`, `HearthAccount.swift`, the
 four `HearthHousehold*.swift` files, `HearthAppSharing.swift`, `HearthPurchases.swift`,
-`HearthPaywall.swift` and `HearthSplash.swift`, plus `Assets.xcassets/Hearth`. Edit the originals in
+`HearthPaywall.swift`, `HearthSplash.swift`, `HearthProfile.swift`, `HearthTour.swift` and
+`HearthOnboarding.swift`, plus `Assets.xcassets/Hearth`. Edit the originals in
 `~/Developer/hearthkit` and run `bash sync.sh` there; never edit a copy. App-specific Hearth code
 (none in Trove yet) would live in `Services/Hearth/` and isn't touched by the sync.
+
+- **Profile, the tour and onboarding are HearthKit's.** Profile is `HearthProfileView`
+  (Features/Profile/ProfileView.swift passes Trove's own section, sync and erase); the tour is
+  `HearthTour` with Trove's steps in `App/TroveTour.swift` and `.hearthTourTarget(_:)` on the
+  views it points at; onboarding pages are built from `HearthOnboarding.swift`, and the
+  household step is always `HearthHouseholdOnboarding`. Don't build Trove-only versions.

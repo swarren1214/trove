@@ -17,7 +17,9 @@ struct PeopleView: View {
         TroveScreen("People") {
             if household.people.isEmpty {
                 EmptyCard(systemName: HearthHouseholdLabel.symbol, title: "Your household", message: "Add your family in Household to keep each person’s papers together.")
-                NavigationLink(value: Destination.profile) {
+                Button {
+                    HearthProfilePresenter.shared.show()
+                } label: {
                     Text("Open Profile").font(.headline).frame(maxWidth: .infinity, minHeight: 34)
                 }
                 .buttonStyle(.glassProminent)

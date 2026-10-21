@@ -469,7 +469,7 @@ struct HearthPaywall: View {
             Button("Try Again") { Task { await store.loadPlans() } }
                 .font(.subheadline.weight(.semibold))
                 .buttonStyle(.bordered)
-                .tint(isHearth ? Ember.text : info.ink)
+                .tint(isHearth ? Ember.text : Color.primary)
                 .padding(.top, 6)
         }
         .padding(.vertical, 22)
@@ -675,7 +675,7 @@ struct HearthPaywall: View {
                     HStack(spacing: 12) {
                         Image(systemName: "checkmark")
                             .font(.body.weight(.bold))
-                            .foregroundStyle(info.ink)
+                            .foregroundStyle(.secondary)
                         Text(perk)
                     }
                     .frame(minHeight: 44)
@@ -707,7 +707,7 @@ struct HearthPaywall: View {
                     Spacer(minLength: 0)
                     Image(systemName: "chevron.right")
                         .font(.footnote.weight(.bold))
-                        .foregroundStyle(Ember.label)
+                        .foregroundStyle(Ember.sub)
                 }
                 .foregroundStyle(Ember.text)
                 .padding(.horizontal, 16)
@@ -740,7 +740,7 @@ struct HearthPaywall: View {
                     .font(.callout.weight(.semibold))
                     .frame(maxWidth: .infinity, minHeight: 54)
                     .background(isHearth ? AnyShapeStyle(Ember.raised) : AnyShapeStyle(Color(.secondarySystemGroupedBackground)), in: .capsule)
-                    .foregroundStyle(isHearth ? Ember.text : info.ink)
+                    .foregroundStyle(isHearth ? Ember.text : Color.primary)
                 Text("Your request went to your family organizer. \(isHearth ? "Hearth+" : app.planName) unlocks as soon as it's approved; you can close this.")
                     .font(.footnote)
                     .foregroundStyle(subStyle)
@@ -983,7 +983,7 @@ struct HearthPaywall: View {
                             Spacer()
                             Text(on ? "Unlocked" : "Not included")
                                 .font(.subheadline.weight(.semibold))
-                                .foregroundStyle(on ? (hearth ? Ember.label : info.ink) : Color.secondary)
+                                .foregroundStyle(on ? (hearth ? Ember.text : Color.primary) : Color.secondary)
                         }
                         .padding(.horizontal, 16)
                         .padding(.vertical, 11)
@@ -1019,7 +1019,7 @@ struct HearthPaywall: View {
                         Text("Manage Subscription")
                             .font(.headline)
                             .frame(maxWidth: .infinity, minHeight: 54)
-                            .foregroundStyle(hearth ? Ember.text : info.ink)
+                            .foregroundStyle(hearth ? Ember.text : Color.primary)
                             .background(hearth ? AnyShapeStyle(Ember.raised) : AnyShapeStyle(Color(.secondarySystemGroupedBackground)), in: .capsule)
                             .overlay(Capsule().strokeBorder(hearth ? Ember.stroke : .clear))
                     }
@@ -1104,7 +1104,7 @@ struct HearthLinkAccountView: View {
                             Spacer()
                             Text(status(for: other))
                                 .font(.subheadline.weight(.semibold))
-                                .foregroundStyle(other == store.app || store.isSignedIn ? Ember.label : Ember.sub)
+                                .foregroundStyle(other == store.app || store.isSignedIn ? Ember.text : Ember.sub)
                         }
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
@@ -1124,7 +1124,7 @@ struct HearthLinkAccountView: View {
                 }
                 Button(beforePurchase && store.signInButton == nil ? "Back" : "Not now", action: onDone)
                     .font(.headline)
-                    .foregroundStyle(Ember.label)
+                    .foregroundStyle(Ember.text)
                     .frame(minHeight: 44)
                     .padding(.top, 8)
                 Text("Your data stays in iCloud. Your Hearth account only tells your apps that you're a member.")
@@ -1197,7 +1197,7 @@ struct HearthLockedCard: View {
             Text("HEARTH+ OR \(store.app.planName.uppercased())")
                 .font(.caption.weight(.bold))
                 .tracking(1.6)
-                .foregroundStyle(Ember.label)
+                .foregroundStyle(Ember.sub)
             Text(feature.title)
                 .font(.title3.bold())
                 .foregroundStyle(Ember.text)
@@ -1282,7 +1282,7 @@ struct HearthMembershipRow: View {
         Button { showsPaywall = true } label: {
             HStack(spacing: 12) {
                 Image(systemName: store.isUnlocked ? "sparkles" : "flame.fill")
-                    .foregroundStyle(store.isUnlocked ? store.app.info.ink : Ember.ember)
+                    .foregroundStyle(.primary)
                     .frame(width: 28)
                 VStack(alignment: .leading, spacing: 1) {
                     Text(title)

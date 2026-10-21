@@ -5,7 +5,7 @@ import SwiftUI
 struct HomeView: View {
     @Environment(AppRouter.self) private var router
     @State private var store = TroveStore.shared
-    @State private var household = HearthHouseholdStore.shared
+    @AppStorage(SettingsKey.firstDocuments) private var pickedDocuments = ""
 
     var body: some View {
         let attention = Attention.items(store: store)
@@ -146,7 +146,7 @@ struct HomeView: View {
                 VStack(alignment: .leading, spacing: 14) {
                     Text("Start with what you’d need in a hurry")
                         .font(.headline)
-                    ForEach(Self.firstDocuments, id: \.self) { type in
+                    ForEach(firstDocuments, id: \.self) { type in
                         Button {
                             router.add(AddDocumentRequest(type: type, scanFirst: true))
                         } label: {
@@ -177,7 +177,13 @@ struct HomeView: View {
         }
     }
 
-    private static let firstDocuments: [DocumentType] = [.passport, .driversLicense, .birthCertificate, .socialSecurityCard, .insuranceCard]
+    private static let usualDocuments: [DocumentType] = [.passport, .driversLicense, .birthCertificate, .socialSecurityCard, .insuranceCard]
+
+    /// What onboarding's "What should Trove keep?" picked, else the usual ones.
+    private var firstDocuments: [DocumentType] {
+        let picked = pickedDocuments.split(separator: ",").compactMap { DocumentType(rawValue: String($0)) }
+        return picked.isEmpty ? Self.usualDocuments : picked
+    }
 }
 
 /// One row of Needs attention: opens the document or the place.

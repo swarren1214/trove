@@ -13,7 +13,7 @@ final class AppLock {
     private(set) var isAuthenticating = false
     @ObservationIgnored private var backgroundedAt: Date?
 
-    /// On, and past the welcome screen (nothing to protect before that).
+    /// On, and past onboarding (nothing to protect before that).
     var isEnabled: Bool {
         UserDefaults.standard.bool(forKey: SettingsKey.faceIDLock) && UserDefaults.standard.bool(forKey: SettingsKey.onboarded)
     }

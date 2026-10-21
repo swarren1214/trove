@@ -242,30 +242,6 @@ struct UrgencyChip: View {
     }
 }
 
-/// A small tinted capsule button, like Documents › Add.
-struct TintedCapsuleButton: View {
-    var title: String
-    var systemImage: String?
-    var action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 4) {
-                if let systemImage {
-                    Image(systemName: systemImage).font(.footnote.weight(.bold))
-                }
-                Text(title)
-            }
-            .font(.subheadline.weight(.semibold))
-            .foregroundStyle(Brand.ink)
-            .padding(.horizontal, 14)
-            .frame(minHeight: 34)
-            .background(Brand.tint, in: .capsule)
-        }
-        .buttonStyle(.plain)
-    }
-}
-
 /// The wide blue button at the bottom of a screen ("Scan a document").
 struct PrimaryButton: View {
     var title: String

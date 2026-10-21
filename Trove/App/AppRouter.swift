@@ -12,7 +12,6 @@ enum Destination: Hashable {
     case place(String)
     case person(String)
     case attention
-    case profile
 }
 
 /// Which tab is showing, each tab's path, and what's being added.
@@ -63,7 +62,6 @@ extension View {
             case .place(let id): PlaceDetailView(placeID: id)
             case .person(let id): PersonDocumentsView(personID: id)
             case .attention: AttentionListView()
-            case .profile: ProfileView()
             }
         }
     }

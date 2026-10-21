@@ -58,6 +58,12 @@ struct RootTabView: View {
         .tabViewStyle(.sidebarAdaptable)
         .tabViewSearchActivation(.searchTabSelection)
         .tabBarMinimizeBehavior(.onScrollDown)
+        // Profile, opened by the photo at the top right of every main screen.
+        .hearthProfile { ProfileView() }
+        // The tour (HearthTour.swift): Welcome after onboarding, then one step per tab.
+        .hearthTour(app: .trove, steps: TroveTour.steps, finishTitle: "Got It") { step in
+            router.tab = TroveTour.tab(for: step)
+        }
         .sheet(item: $router.adding) { request in
             AddDocumentSheet(request: request)
         }
