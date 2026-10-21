@@ -10,6 +10,9 @@ nonisolated enum SettingsKey {
     static let faceIDLock = "privacy.faceIDLock"
     /// Lock again after this many seconds in the background (0 = right away).
     static let lockAfterSeconds = "privacy.lockAfterSeconds"
+    /// Blur Trove and show a privacy note whenever it isn't the app in use: the app switcher,
+    /// Control Center, Notification Center (Profile › Hide in App Switcher). On by default.
+    static let privacyCover = "privacy.cover"
     /// Local notifications before documents expire (Profile › Reminders).
     static let expiryReminders = "reminders.expiry"
     /// A yearly nudge to check that each place still holds its originals.
@@ -27,6 +30,7 @@ nonisolated enum SettingsKey {
         UserDefaults.standard.register(defaults: [
             faceIDLock: true,
             lockAfterSeconds: 60,
+            privacyCover: true,
             expiryReminders: true,
             placeReminders: true,
         ])

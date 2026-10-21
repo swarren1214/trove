@@ -62,7 +62,7 @@ struct AssetDetailView: View {
                     VStack(spacing: 0) {
                         ForEach(Array(missing.enumerated()), id: \.element) { index, type in
                             Button {
-                                router.add(AddDocumentRequest(owner: .asset(asset.id), type: type, scanFirst: true))
+                                router.add(AddDocumentRequest(owner: .asset(asset.id), type: type))
                             } label: {
                                 HStack(spacing: 12) {
                                     IconTile(symbol: type.symbol, size: 32, foreground: Color(.secondaryLabel), background: Color(.tertiarySystemFill))
@@ -87,7 +87,7 @@ struct AssetDetailView: View {
             }
 
             PrimaryButton(title: "Scan a Document", systemImage: "doc.viewfinder") {
-                router.add(AddDocumentRequest(owner: .asset(asset.id), scanFirst: true))
+                router.add(AddDocumentRequest(owner: .asset(asset.id)))
             }
         }
         .refreshable { await store.syncNow() }

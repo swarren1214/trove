@@ -148,7 +148,7 @@ struct HomeView: View {
                         .font(.headline)
                     ForEach(firstDocuments, id: \.self) { type in
                         Button {
-                            router.add(AddDocumentRequest(type: type, scanFirst: true))
+                            router.add(AddDocumentRequest(type: type))
                         } label: {
                             HStack(spacing: 12) {
                                 IconTile(symbol: type.symbol, size: 34)
@@ -167,7 +167,7 @@ struct HomeView: View {
                 }
             }
             PrimaryButton(title: "Scan a Document", systemImage: "doc.viewfinder") {
-                router.add(AddDocumentRequest(scanFirst: true))
+                router.add(AddDocumentRequest())
             }
             Text("Scans are read on this \(DeviceName.current) and kept in your iCloud, encrypted. Nothing goes to Hearth’s servers.")
                 .font(.footnote)

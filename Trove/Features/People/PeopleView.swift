@@ -144,7 +144,7 @@ struct PersonDocuments: View {
                         .buttonStyle(.plain)
                     } else {
                         Button {
-                            router.add(AddDocumentRequest(owner: .person(person.id), type: type, scanFirst: true))
+                            router.add(AddDocumentRequest(owner: .person(person.id), type: type))
                         } label: {
                             EssentialRow(type: type, document: nil)
                         }

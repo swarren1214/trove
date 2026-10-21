@@ -10,6 +10,7 @@ struct ProfileView: View {
     @State private var store = TroveStore.shared
     @AppStorage(SettingsKey.faceIDLock) private var faceIDLock = true
     @AppStorage(SettingsKey.lockAfterSeconds) private var lockAfter = 60
+    @AppStorage(SettingsKey.privacyCover) private var privacyCover = true
     @AppStorage(SettingsKey.expiryReminders) private var expiryReminders = true
     @AppStorage(SettingsKey.placeReminders) private var placeReminders = true
     @AppStorage(SettingsKey.onboarded) private var onboarded = true
@@ -67,7 +68,7 @@ struct ProfileView: View {
         return HearthAccountProfile(name: appleName.isEmpty ? nil : appleName, email: appleEmail.isEmpty ? nil : appleEmail, method: "Signed in with Apple on this \(DeviceName.current)")
     }
 
-    /// Trove's own settings: your info, reminders and the Face ID lock.
+    /// Trove's own settings: your info, reminders, the Face ID lock and the app-switcher blur.
     private var troveSection: some View {
         Section("Trove") {
             if household.me != nil {
@@ -92,6 +93,14 @@ struct ProfileView: View {
                 // A list with the checkmark on the right, not a menu (see AGENT.md).
                 NavigationLink { LockAfterView(seconds: $lockAfter) } label: {
                     HearthProfileRow("Lock After", systemImage: "timer", value: LockAfterView.label(lockAfter))
+                }
+            }
+            // Blurs Trove in the app switcher, Control Center and Notification Center.
+            Toggle(isOn: $privacyCover) {
+                Label {
+                    Text("Hide in App Switcher")
+                } icon: {
+                    Image(systemName: "eye.slash").foregroundStyle(.primary)
                 }
             }
             NavigationLink { AboutView() } label: {

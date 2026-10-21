@@ -103,7 +103,7 @@ struct DocumentDetailView: View {
         VStack(alignment: .leading, spacing: 12) {
             CardLabel(title: "Original scans", symbol: "photo.on.rectangle") {
                 Button(document.scans.isEmpty ? "Scan" : "Rescan") {
-                    router.add(AddDocumentRequest(owner: document.owner, type: document.type, scanFirst: true, documentID: document.id))
+                    router.add(AddDocumentRequest(owner: document.owner, type: document.type, documentID: document.id))
                 }
                 .font(.subheadline)
                 .foregroundStyle(Brand.ink)
@@ -238,7 +238,7 @@ struct DocumentDetailView: View {
                 }
                 HStack(spacing: 16) {
                     Button("Scan the New One") {
-                        router.add(AddDocumentRequest(owner: document.owner, type: document.type, scanFirst: true))
+                        router.add(AddDocumentRequest(owner: document.owner, type: document.type))
                     }
                 }
                 .font(.subheadline.weight(.semibold))

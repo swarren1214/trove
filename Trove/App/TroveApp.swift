@@ -41,8 +41,8 @@ struct TroveApp: App {
     }
 }
 
-/// Onboarding the first time, the tabs after that, and the covers: Face ID when locked,
-/// a blur in the app switcher.
+/// Onboarding the first time, the tabs after that, and the covers: Face ID when locked, a blur
+/// with a privacy note in the app switcher (Profile › Hide in App Switcher).
 struct AppRoot: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(AppRouter.self) private var router
@@ -112,10 +112,17 @@ struct AppRoot: View {
                     await TroveSharing.update()
                 }
             case .inactive:
-                // The app switcher's snapshot shows a cover, never a document.
-                CoverWindow.showPrivacy()
+                // Leaving Trove (the app switcher, Control Center): blur it before iOS takes the
+                // switcher's snapshot. Not at launch (inactive → active), and not for the Face ID
+                // prompt, which also makes the app inactive.
+                if old == .active, !lock.isAuthenticating, !lock.isLocked,
+                   UserDefaults.standard.bool(forKey: SettingsKey.privacyCover) {
+                    CoverWindow.showPrivacy()
+                }
             case .background:
-                CoverWindow.showPrivacy()
+                if UserDefaults.standard.bool(forKey: SettingsKey.privacyCover) {
+                    CoverWindow.showPrivacy()
+                }
                 lock.didEnterBackground()
                 store.persistNow()
             @unknown default:
@@ -126,7 +133,7 @@ struct AppRoot: View {
 }
 
 /// Covers the whole app, sheets included, in a window above everything: the Face ID lock, or a
-/// plain cover while the app is in the app switcher.
+/// blur with a privacy note while Trove isn't the app in use.
 enum CoverWindow {
     /// One cover per window scene, so every iPad window (Split View, Stage Manager) is hidden.
     private static var lockWindows: [UIWindow] = []
@@ -144,12 +151,19 @@ enum CoverWindow {
 
     static func showPrivacy() {
         guard privacyWindows.isEmpty else { return }
-        privacyWindows = makeWindows(level: .alert + 1) { UIHostingController(rootView: PrivacyCover()) }
+        privacyWindows = makeWindows(level: .alert + 1) { PrivacyCoverController() }
     }
 
+    /// Fades the blur away as Trove comes back.
     static func hidePrivacy() {
-        privacyWindows.forEach { $0.isHidden = true }
+        let windows = privacyWindows
         privacyWindows = []
+        guard !windows.isEmpty else { return }
+        UIView.animate(withDuration: 0.25, animations: {
+            windows.forEach { $0.alpha = 0 }
+        }, completion: { _ in
+            windows.forEach { $0.isHidden = true }
+        })
     }
 
     private static func makeWindows(level: UIWindow.Level, controller: () -> UIViewController) -> [UIWindow] {
@@ -164,16 +178,49 @@ enum CoverWindow {
     }
 }
 
-/// What the app switcher shows: the blue, the Trove mark, nothing else.
-private struct PrivacyCover: View {
+/// What shows while Trove isn't the app in use: the app blurred past reading, a lock and a
+/// short note. The blur is a real `UIVisualEffectView`, so it blurs the app's window beneath.
+private final class PrivacyCoverController: UIViewController {
+    override func loadView() {
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemThickMaterial))
+        view = blur
+        let note = UIHostingController(rootView: PrivacyNote())
+        note.view.backgroundColor = .clear
+        addChild(note)
+        note.view.translatesAutoresizingMaskIntoConstraints = false
+        blur.contentView.addSubview(note.view)
+        NSLayoutConstraint.activate([
+            note.view.leadingAnchor.constraint(equalTo: blur.contentView.leadingAnchor),
+            note.view.trailingAnchor.constraint(equalTo: blur.contentView.trailingAnchor),
+            note.view.topAnchor.constraint(equalTo: blur.contentView.topAnchor),
+            note.view.bottomAnchor.constraint(equalTo: blur.contentView.bottomAnchor),
+        ])
+        note.didMove(toParent: self)
+    }
+}
+
+/// The lock and the note on the privacy blur.
+private struct PrivacyNote: View {
     var body: some View {
-        ZStack {
-            Brand.skyDeep.ignoresSafeArea()
-            Image(systemName: "archivebox.fill")
-                .font(.system(size: 54, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.9))
-                .accessibilityHidden(true)
+        VStack(spacing: 12) {
+            Image(systemName: "lock.fill")
+                .font(.system(size: 34, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 76, height: 76)
+                .background(Brand.sky, in: .rect(cornerRadius: 18, style: .continuous))
+                .padding(.bottom, 4)
+            Text("Hidden for Privacy")
+                .font(.title2.bold())
+                .multilineTextAlignment(.center)
+            Text("Your documents stay hidden while Trove isn’t open.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
         }
+        .padding(.horizontal, 32)
+        .frame(maxWidth: 420)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityElement(children: .combine)
     }
 }
 

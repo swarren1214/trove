@@ -372,7 +372,7 @@ struct OnboardingView: View {
 
     // MARK: Finish
 
-    /// Better with Hearth: Show Me Around starts the tour; Scan a Document opens the camera.
+    /// Better with Hearth: Show Me Around starts the tour; Scan a Document opens New Document.
     private func finish(_ tour: Bool) {
         HearthOnboarding.finish(.trove, tour: tour)
         withAnimation { onboarded = true }
@@ -380,7 +380,7 @@ struct OnboardingView: View {
             // Once the tabs are up (the Add Document sheet hangs off them).
             Task {
                 try? await Task.sleep(for: .milliseconds(600))
-                router.add(AddDocumentRequest(scanFirst: true))
+                router.add(AddDocumentRequest())
             }
         }
     }

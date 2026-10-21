@@ -46,8 +46,6 @@ struct AddDocumentRequest: Identifiable, Hashable {
     var id = UUID()
     var owner: DocumentOwner?
     var type: DocumentType?
-    /// Open straight to the camera.
-    var scanFirst = false
     /// New pages for a document that's already in Trove (Rescan), instead of a new document.
     var documentID: String?
 }
