@@ -657,10 +657,14 @@ final class HearthHouseholdStore: NSObject, CKSyncEngineDelegate {
 
     /// `clearAppShares` blanks every app's share link (Stop Sharing). Blank, not removed: links
     /// merge per key, so a removed one would come back from another app's copy.
-    func updateInfo(name: String? = nil, restrictions: [String]? = nil, joinCode: String? = nil, appShare: (app: HearthApp, url: String)? = nil, clearAppShares: Bool = false) {
+    func updateInfo(name: String? = nil, restrictions: [String]? = nil, joinCode: String? = nil, appShare: (app: HearthApp, url: String)? = nil, clearAppShares: Bool = false, mealTimes: HearthMealTimes? = nil) {
         catchUpWithOtherApps()
         guard var info = snapshot.info else { return }
         if let name { info.name = name }
+        if let mealTimes, mealTimes != info.mealTimes {
+            info.mealTimes = mealTimes
+            info.mealTimesAt = Self.stamp
+        }
         if let restrictions { info.restrictions = restrictions }
         if let joinCode { info.joinCode = joinCode }
         if clearAppShares {
@@ -893,8 +897,10 @@ final class HearthHouseholdStore: NSObject, CKSyncEngineDelegate {
                     var merged = theirsNewer ? info : mine
                     let other = theirsNewer ? mine : info
                     for (app, url) in other.appShareURLs where merged.appShareURLs[app] == nil { merged.appShareURLs[app] = url }
+                    merged.keepNewerMealTimes(from: other)
                     next.info = merged
-                    let iCloudLacks = merged.appShareURLs != info.appShareURLs || Self.isNewer(mine.updatedAt, than: info.updatedAt)
+                    let iCloudLacks = merged.appShareURLs != info.appShareURLs || merged.mealTimes != info.mealTimes
+                        || Self.isNewer(mine.updatedAt, than: info.updatedAt)
                     if iCloudLacks, !isMember, !pending.contains(name) { resend.append(name) }
                 }
             } else if record.recordType == "HouseholdMember", let deletedAt = HearthHouseholdRecords.deletedAt(record) {
@@ -1098,6 +1104,7 @@ final class HearthHouseholdStore: NSObject, CKSyncEngineDelegate {
             guard theirs.updatedAt > mine.updatedAt else { return false }
             var merged = theirs
             for (app, url) in mine.appShareURLs where merged.appShareURLs[app] == nil { merged.appShareURLs[app] = url }
+            merged.keepNewerMealTimes(from: mine)
             snapshot.info = merged
             publish()
             if merged != theirs { queueSaves([Self.householdRecordName]) }
@@ -1776,6 +1783,11 @@ nonisolated enum HearthHouseholdRecords {
         record.encryptedValues["restrictions"] = info.restrictions as NSArray
         record.encryptedValues["joinCode"] = info.joinCode.map { $0 as NSString }
         record.encryptedValues["appShareURLs"] = (try? JSONEncoder().encode(info.appShareURLs)).flatMap { String(data: $0, encoding: .utf8) }.map { $0 as NSString }
+        // Only once some app has set them: left unset, iCloud keeps the times it has.
+        if let mealTimes = info.mealTimes, let data = try? JSONEncoder().encode(mealTimes) {
+            record["mealTimes"] = String(decoding: data, as: UTF8.self) as NSString
+            record["mealTimesAt"] = (info.mealTimesAt ?? info.updatedAt) as NSDate
+        }
     }
 
     static func info(from record: CKRecord) -> HearthHouseholdInfo {
@@ -1787,7 +1799,10 @@ nonisolated enum HearthHouseholdRecords {
             updatedAt: record["updatedAt"] as? Date ?? record.modificationDate ?? .distantPast,
             joinCode: record.encryptedValues["joinCode"] as? String,
             appShareURLs: (record.encryptedValues["appShareURLs"] as? String)
-                .flatMap { try? JSONDecoder().decode([String: String].self, from: Data($0.utf8)) } ?? [:]
+                .flatMap { try? JSONDecoder().decode([String: String].self, from: Data($0.utf8)) } ?? [:],
+            mealTimes: (record["mealTimes"] as? String)
+                .flatMap { try? JSONDecoder().decode(HearthMealTimes.self, from: Data($0.utf8)) },
+            mealTimesAt: record["mealTimesAt"] as? Date
         )
     }
 

@@ -452,7 +452,13 @@ struct HearthProfileErase {
         self.confirm = confirm
         self.footer = footer
         self.symbol = symbol
-        self.action = action
+        // Erasing starts the app over: so does onboarding, here and on their other devices.
+        // (An app that only leaves a shared household keeps its onboarding on this device, and
+        // says so in iCloud again at its next launch.)
+        self.action = {
+            await action()
+            await HearthOnboarding.forgetInCloud(app)
+        }
     }
 }
 

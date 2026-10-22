@@ -8,12 +8,12 @@
         {
           "image-name" : "trove-icon-01.svg",
           "name" : "trove-icon-01",
-          "opacity" : 0.9
+          "opacity" : 0.75
         },
         {
-          "image-name" : "trove-icon-02.svg",
-          "name" : "trove-icon-02",
-          "opacity" : 0.5
+          "image-name" : "trove-icon-02 2.svg",
+          "name" : "trove-icon-02 2",
+          "opacity" : 0.95
         }
       ],
       "position" : {
