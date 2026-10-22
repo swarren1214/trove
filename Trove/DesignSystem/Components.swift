@@ -53,17 +53,48 @@ struct TroveScreen<Content: View>: View {
     var subtitle: String?
     /// Large title in the content (tabs) or a small centered title in the bar (details).
     var largeTitle = true
+    /// Sets the navigation bar's title and look. False when the screen is a pane beside a list
+    /// (Search › Browse on a wide screen), where the list's screen owns the bar.
+    var ownsBar = true
     @ViewBuilder var content: () -> Content
 
-    init(_ title: String, eyebrow: String? = nil, subtitle: String? = nil, largeTitle: Bool = true, @ViewBuilder content: @escaping () -> Content) {
+    init(_ title: String, eyebrow: String? = nil, subtitle: String? = nil, largeTitle: Bool = true, ownsBar: Bool = true, @ViewBuilder content: @escaping () -> Content) {
         self.title = title
         self.eyebrow = eyebrow
         self.subtitle = subtitle
         self.largeTitle = largeTitle
+        self.ownsBar = ownsBar
         self.content = content
     }
 
     var body: some View {
+        if ownsBar {
+            page
+                .navigationTitle(title)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarColorScheme(.dark, for: .navigationBar)
+                .toolbar {
+                    if largeTitle {
+                        // The title is drawn large in the content, as in the designs.
+                        ToolbarItem(placement: .principal) {
+                            Color.clear.frame(width: 1, height: 1).accessibilityHidden(true)
+                        }
+                    } else {
+                        ToolbarItem(placement: .principal) {
+                            Text(title)
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                                .lineLimit(1)
+                        }
+                    }
+                }
+        } else {
+            page
+        }
+    }
+
+    /// The header and the cards, without the bar.
+    private var page: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 if largeTitle || eyebrow != nil || subtitle != nil {
@@ -99,24 +130,6 @@ struct TroveScreen<Content: View>: View {
         }
         .background(alignment: .top) { HeaderGradient() }
         .background(Color(.systemGroupedBackground))
-        .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarColorScheme(.dark, for: .navigationBar)
-        .toolbar {
-            if largeTitle {
-                // The title is drawn large in the content, as in the designs.
-                ToolbarItem(placement: .principal) {
-                    Color.clear.frame(width: 1, height: 1).accessibilityHidden(true)
-                }
-            } else {
-                ToolbarItem(placement: .principal) {
-                    Text(title)
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                        .lineLimit(1)
-                }
-            }
-        }
     }
 }
 
@@ -324,5 +337,27 @@ struct FactRow<Value: View>: View {
 extension FactRow where Value == Text {
     init(_ label: String, value: String, isLast: Bool = false) {
         self.init(label: label, isLast: isLast) { Text(value) }
+    }
+}
+
+/// A grid of cards with an even number of columns (2, 4, 6) for the width it has, so when an
+/// iPhone Duo is partly folded the fold falls between columns instead of through a card. Small
+/// widths get 2, as the adaptive grids it replaces did on every iPhone.
+struct EvenGrid<Content: View>: View {
+    /// The narrowest a card can be.
+    var minimumCellWidth: CGFloat
+    var spacing: CGFloat = 12
+    var rowSpacing: CGFloat = 12
+    @ViewBuilder var content: () -> Content
+
+    @State private var width: CGFloat = 0
+
+    var body: some View {
+        // Each column needs its width plus the gap after it (the last one has none).
+        let count = HearthEvenColumns.count(for: width + spacing, minimumCellWidth: minimumCellWidth + spacing, maximum: 6)
+        LazyVGrid(columns: HearthEvenColumns.flexible(count, spacing: spacing), spacing: rowSpacing) {
+            content()
+        }
+        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
     }
 }

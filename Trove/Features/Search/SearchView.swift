@@ -107,20 +107,64 @@ private struct SearchRow: View {
     }
 }
 
-/// Search › Browse: every document of one kind.
+/// Search › Browse: every document of one kind. Where there's room (regular width in
+/// landscape, iPhone Duo open wide, or partly folded), the list sits beside the document it has
+/// selected, in equal panes clear of the fold (`HearthFoldSplit`). Otherwise rows push the
+/// document, as before.
 private struct GroupDocumentsView: View {
     var group: DocumentType.Group
     @State private var store = TroveStore.shared
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.hearthDuoPose) private var pose
+    /// The document beside the list. Kept here, above both layouts, so it survives rotating,
+    /// folding and unfolding.
+    @State private var selectedID: String?
+
+    private var documents: [TroveDocument] {
+        store.documents.filter { $0.type.group == group }
+    }
 
     var body: some View {
-        List {
-            ForEach(store.documents.filter { $0.type.group == group }) { document in
-                NavigationLink(value: Destination.document(document.id)) {
-                    SearchRow(symbol: document.type.symbol, title: Attention.title(of: document), detail: Attention.expiryLine(document)?.text ?? document.type.label)
+        GeometryReader { proxy in
+            let roomy = sizeClass == .regular && (proxy.size.width > proxy.size.height || pose.isFolded)
+            // A removed document falls back to the first one.
+            if roomy, let selected = documents.first(where: { $0.id == selectedID }) ?? documents.first {
+                HearthFoldSplit {
+                    list(selection: selected.id)
+                } secondary: {
+                    DocumentDetailView(documentID: selected.id, inPane: true)
+                        .id(selected.id)
                 }
+            } else {
+                list(selection: nil)
             }
         }
         .navigationTitle(group.title)
         .refreshable { await store.syncNow() }
+    }
+
+    /// The documents: rows select the one beside the list when there's a `selection`, and push
+    /// it when there isn't.
+    private func list(selection: String?) -> some View {
+        List {
+            ForEach(documents) { document in
+                let row = SearchRow(symbol: document.type.symbol, title: Attention.title(of: document), detail: Attention.expiryLine(document)?.text ?? document.type.label)
+                if let selection {
+                    let isSelected = document.id == selection
+                    Button {
+                        selectedID = document.id
+                    } label: {
+                        row
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(.rect)
+                    }
+                    .tint(.primary)
+                    .listRowBackground(isSelected ? Color(.tertiarySystemFill) : nil)
+                    .accessibilityAddTraits(isSelected ? .isSelected : [])
+                } else {
+                    NavigationLink(value: Destination.document(document.id)) { row }
+                }
+            }
+        }
     }
 }

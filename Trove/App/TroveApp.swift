@@ -37,6 +37,8 @@ struct TroveApp: App {
                 .hearthSplash(.trove)
                 .environment(router)
                 .environment(lock)
+                // iPhone Duo: reads the pose once for the whole window (\.hearthDuoPose below).
+                .hearthDuoPose()
         }
     }
 }

@@ -25,7 +25,7 @@ struct AssetsView: View {
                     let group = store.assets.filter { $0.kind == kind }
                     if !group.isEmpty {
                         SectionTitle(kind.pluralLabel)
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 12)], spacing: 12) {
+                        EvenGrid(minimumCellWidth: 150) {
                             ForEach(group) { asset in
                                 NavigationLink(value: Destination.asset(asset.id)) {
                                     AssetTile(asset: asset)

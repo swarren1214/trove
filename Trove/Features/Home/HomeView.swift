@@ -111,7 +111,7 @@ struct HomeView: View {
                 }
                 .buttonStyle(.plain)
             } else {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 12)], spacing: 12) {
+                EvenGrid(minimumCellWidth: 150) {
                     ForEach(store.assets) { asset in
                         NavigationLink(value: Destination.asset(asset.id)) {
                             AssetTile(asset: asset)

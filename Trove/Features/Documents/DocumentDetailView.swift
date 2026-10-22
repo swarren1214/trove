@@ -5,8 +5,13 @@ import SwiftUI
 /// it's coming due, and Present, Share Copy and Export PDF.
 struct DocumentDetailView: View {
     let documentID: String
+    /// Shown as a pane beside a list of documents (Search › Browse on a wide screen) rather
+    /// than pushed: the title goes in the content, the list's screen keeps the bar, and
+    /// deleting leaves the list in place.
+    var inPane = false
     @Environment(AppRouter.self) private var router
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.hearthDuoPose) private var pose
     @State private var store = TroveStore.shared
     @State private var editing = false
     @State private var choosingPlace = false
@@ -18,12 +23,18 @@ struct DocumentDetailView: View {
             content(document)
         } else {
             ContentUnavailableView("This document was removed", systemImage: "doc")
-                .troveToolbar()
+                .troveToolbar(showsProfile: !inPane, overColorHeader: iconsOverHeader)
         }
     }
 
+    /// Whether the bar's icons sit over the blue header. Pushed: always. As a pane: the pane's
+    /// header runs up under the trailing end of the bar when the panes are side by side (iPad
+    /// landscape, Open wide, Book), so the icons stay white; only Laptop stacks the pane below
+    /// the list, where the bar is over the plain list and the icons take the text color.
+    private var iconsOverHeader: Bool { !inPane || pose != .laptop }
+
     private func content(_ document: TroveDocument) -> some View {
-        TroveScreen(Attention.title(of: document), largeTitle: false) {
+        TroveScreen(Attention.title(of: document), largeTitle: inPane, ownsBar: !inPane) {
             DocumentHeroCard(document: document, ownerName: ownerLine(document))
 
             if document.hasNumber || !document.nameOnDocument.isEmpty || document.type.numberLabel != nil {
@@ -62,11 +73,12 @@ struct DocumentDetailView: View {
             }
         }
         .refreshable { await store.syncNow() }
-        .troveToolbar {
+        .troveToolbar(showsProfile: !inPane, overColorHeader: iconsOverHeader) {
             Button("Edit", systemImage: "pencil") { editing = true }
         }
         .sheet(isPresented: $editing) {
-            DocumentEditor(document: document) { dismiss() }
+            // In a pane, the list beside it stays and selects the next document.
+            DocumentEditor(document: document) { if !inPane { dismiss() } }
         }
         .sheet(isPresented: $choosingPlace) {
             PlacePicker(document: document)
@@ -121,7 +133,7 @@ struct DocumentDetailView: View {
                     .padding(.vertical, 8)
                 } else {
                     VStack(alignment: .leading, spacing: 12) {
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 130), spacing: 10)], spacing: 12) {
+                        EvenGrid(minimumCellWidth: 130, spacing: 10) {
                             ForEach(document.scans) { scan in
                                 Button { viewing = scan } label: {
                                     VStack(alignment: .leading, spacing: 6) {
