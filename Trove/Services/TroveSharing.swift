@@ -10,6 +10,7 @@ enum TroveSharing {
     /// Call on launch, coming to the foreground and when the household changes. Safe to call
     /// often: it only changes what's out of date.
     static func update() async {
+        guard !ScreenshotMode.isOn else { return }
         let household = HearthHouseholdStore.shared
         guard !isRunning, household.exists else { return }
         isRunning = true

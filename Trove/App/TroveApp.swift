@@ -10,6 +10,12 @@ struct TroveApp: App {
 
     init() {
         SettingsKey.registerDefaults()
+        // Screenshot mode borrows the settings that would show onboarding, Face ID or the blur,
+        // and fills a demo household and vault before anything reads them.
+        ScreenshotMode.prepareLaunch()
+        #if DEBUG
+        ScreenshotSeed.stage()
+        #endif
         // The vault syncs in the Hearth household's iCloud: its zone registers with the
         // household before the household starts (AppRoot's task).
         TroveStore.shared.prepare()
@@ -34,7 +40,7 @@ struct TroveApp: App {
         WindowGroup {
             AppRoot()
                 // The Hearth launch splash.
-                .hearthSplash(.trove)
+                .hearthSplash(.trove, isEnabled: !ScreenshotMode.isOn)
                 .environment(router)
                 .environment(lock)
                 // iPhone Duo: reads the pose once for the whole window (\.hearthDuoPose below).
@@ -71,6 +77,7 @@ struct AppRoot: View {
         // Trove's side of a person's page in Household: their documents.
         .environment(\.hearthPersonExtras, { person in AnyView(TrovePersonExtras(person: person)) })
         .task {
+            guard !ScreenshotMode.isOn else { return }
             family.start(app: .trove)
             store.refreshLocation()
             await TroveSharing.update()
@@ -109,9 +116,11 @@ struct AppRoot: View {
                     lock.willEnterForeground()
                     Task { await lock.unlock() }
                 }
-                Task {
-                    await store.syncNow()
-                    await TroveSharing.update()
+                if !ScreenshotMode.isOn {
+                    Task {
+                        await store.syncNow()
+                        await TroveSharing.update()
+                    }
                 }
             case .inactive:
                 // Leaving Trove (the app switcher, Control Center): blur it before iOS takes the

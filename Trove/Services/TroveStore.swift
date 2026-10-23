@@ -48,6 +48,17 @@ final class TroveStore: HearthZoneParticipant {
     @ObservationIgnored private var systemFields: [String: Data] = [:]
     @ObservationIgnored private var saveTask: Task<Void, Never>?
     @ObservationIgnored private var started = false
+    /// Screenshot mode: a made-up vault in memory (`showForScreenshots`).
+    @ObservationIgnored private var showingScreenshots = false
+
+    #if DEBUG
+    /// Screenshot mode only: shows `state` without reading or writing the vault's files or iCloud.
+    func showForScreenshots(_ state: TroveState) {
+        started = true
+        showingScreenshots = true
+        self.state = state
+    }
+    #endif
     @ObservationIgnored private let log = Logger(subsystem: "com.stephenwarren.trove", category: "vault")
 
     /// Which family's vault this account joined (its zone owner), once accepted.
@@ -77,6 +88,7 @@ final class TroveStore: HearthZoneParticipant {
     /// Follows the household: joined, left, or the vault's share accepted. Call when the
     /// household changes.
     func refreshLocation() {
+        guard !showingScreenshots else { return }
         guard started else { return }
         // Left that family's household: their vault doesn't stay on this device.
         if case .shared(let ownerName) = location, household.mode != .member(ownerName: ownerName) {
@@ -302,6 +314,7 @@ final class TroveStore: HearthZoneParticipant {
 
     /// Sends and fetches now (pull to refresh).
     func syncNow() async {
+        guard !showingScreenshots else { return }
         guard let zone = zoneLocation else { return }
         await household.syncZoneNow(isShared: zone.isShared)
     }
@@ -443,6 +456,7 @@ final class TroveStore: HearthZoneParticipant {
     }
 
     private func scheduleSave() {
+        guard !showingScreenshots else { return }
         saveTask?.cancel()
         saveTask = Task {
             try? await Task.sleep(for: .milliseconds(500))
@@ -452,6 +466,8 @@ final class TroveStore: HearthZoneParticipant {
     }
 
     func persistNow() {
+        // Screenshot mode's vault is made up: never written over the real one.
+        guard !showingScreenshots else { return }
         saveTask?.cancel()
         TroveFiles.saveState(state, location.fileKey)
         TroveFiles.saveFields(systemFields, location.fileKey)

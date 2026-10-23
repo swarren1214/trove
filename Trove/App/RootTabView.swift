@@ -61,12 +61,13 @@ struct RootTabView: View {
         // Profile, opened by the photo at the top right of every main screen.
         .hearthProfile { ProfileView() }
         // The tour (HearthTour.swift): Welcome after onboarding, then one step per tab.
-        .hearthTour(app: .trove, steps: TroveTour.steps, finishTitle: "Got It") { step in
+        .hearthTour(app: .trove, steps: TroveTour.steps, finishTitle: "Got It", autoStart: !ScreenshotMode.isOn) { step in
             router.tab = TroveTour.tab(for: step)
         }
         .sheet(item: $router.adding) { request in
             AddDocumentSheet(request: request)
         }
+        .screenshotScreen()
     }
 
     /// Icon only in the iPhone tab bar, as in every Hearth app (VoiceOver still reads the
