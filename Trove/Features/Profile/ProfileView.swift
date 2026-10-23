@@ -236,10 +236,11 @@ private struct ProfileAccount: View {
             appleUserID = shared.userID
             appleName = shared.fullName ?? ""
             appleEmail = shared.email ?? ""
-        } else if !appleUserID.isEmpty {
+        } else if !appleUserID.isEmpty, HearthAccounts.appleIDIsGone {
+            // (Only when it's really gone: one the Keychain can't read just now isn't a sign-out.)
             if UserDefaults.standard.bool(forKey: sharedKey) {
                 // It was shared and now it's gone: signed out in another Hearth app.
-                guard HearthAccounts.session() == nil else { return }
+                guard HearthAccounts.sessionIsGone else { return }
                 appleUserID = ""
                 appleName = ""
                 appleEmail = ""
