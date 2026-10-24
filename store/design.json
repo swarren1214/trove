@@ -1,0 +1,524 @@
+{
+  "accentHex" : "#6D7CFF",
+  "ascAppID" : "",
+  "ascAppName" : "",
+  "inkHex" : "",
+  "listings" : {
+
+  },
+  "live" : {
+
+  },
+  "locale" : "en-US",
+  "sets" : {
+    "artHeader" : {
+      "captures" : [
+
+      ],
+      "devices" : [
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "groupID" : "02066EEB-7E12-4878-9D08-B4ACA0C9E963",
+          "hidden" : false,
+          "id" : "83B4AF10-D137-4FD4-99B9-57C9586C7235",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-f6bcd037",
+          "rotation" : 0,
+          "scale" : 1.5868051020127742,
+          "shadow" : true,
+          "x" : 1606,
+          "y" : 341
+        },
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "groupID" : "02066EEB-7E12-4878-9D08-B4ACA0C9E963",
+          "hidden" : false,
+          "id" : "F1364E3C-87D6-432F-B355-F9BA32275164",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-f6bcd037",
+          "rotation" : 0,
+          "scale" : 1.8014096265771122,
+          "shadow" : true,
+          "x" : 2517,
+          "y" : 462
+        },
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "groupID" : "02066EEB-7E12-4878-9D08-B4ACA0C9E963",
+          "hidden" : false,
+          "id" : "5991E7DD-3F32-4F43-9AD2-FC7189D5CF72",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-f6bcd037",
+          "rotation" : 0,
+          "scale" : 1.8901497118467723,
+          "shadow" : true,
+          "x" : 2067,
+          "y" : 25
+        }
+      ],
+      "frames" : [
+        {
+          "id" : "2706B58E-03C7-4463-AC32-170551CC602E",
+          "line1" : "Trove",
+          "line2" : "[Headline]",
+          "look" : "accent",
+          "showIcon" : false,
+          "subhead" : ""
+        }
+      ],
+      "layerGroups" : [
+        {
+          "id" : "02066EEB-7E12-4878-9D08-B4ACA0C9E963",
+          "name" : "Group 1"
+        }
+      ],
+      "linked" : [
+
+      ],
+      "publish" : true
+    },
+    "artSearch" : {
+      "captures" : [
+
+      ],
+      "devices" : [
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "8E0509E1-CC24-4C90-A32B-7FB6BC51A037",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-f6bcd037",
+          "rotation" : 0,
+          "scale" : 1.9270638416783026,
+          "shadow" : true,
+          "x" : 1596.4314803244897,
+          "y" : 581.9999999999999
+        },
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "493D72AE-FF39-4ABF-BB8D-7D66D391C4EF",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-f6bcd037",
+          "rotation" : 0,
+          "scale" : 1.9855162474480224,
+          "shadow" : true,
+          "x" : 2790,
+          "y" : 829
+        },
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "E022473F-D585-4497-8B8D-7C52BB7D3181",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-f6bcd037",
+          "rotation" : 0,
+          "scale" : 2.15,
+          "shadow" : true,
+          "x" : 2240,
+          "y" : 170
+        }
+      ],
+      "frames" : [
+        {
+          "id" : "0499C64F-D57C-4C86-86FA-45E43C9DFB0F",
+          "line1" : "Trove",
+          "line2" : "[Headline]",
+          "look" : "tint",
+          "showIcon" : true,
+          "subhead" : "[One line about the app]"
+        }
+      ],
+      "layerGroups" : [
+
+      ],
+      "linked" : [
+
+      ],
+      "publish" : true
+    },
+    "duoOuter" : {
+      "captures" : [
+
+      ],
+      "devices" : [
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "62887C10-DD04-4829-A59C-6735B2356C3F",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-13c1dea3",
+          "rotation" : 0,
+          "scale" : 1.977205539639103,
+          "shadow" : true,
+          "x" : 140,
+          "y" : 639
+        },
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "A4D24B02-8D04-4A74-811E-6C3E87198DEA",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-f7e3c805",
+          "rotation" : 0,
+          "scale" : 1,
+          "shadow" : true,
+          "x" : 1857,
+          "y" : 544
+        },
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "C17B172A-3493-4CDB-8F4A-DB3CC971EF54",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-f7e3c805",
+          "rotation" : 0,
+          "scale" : 1.2512193589706353,
+          "shadow" : true,
+          "x" : 3020,
+          "y" : 520
+        }
+      ],
+      "frames" : [
+        {
+          "id" : "33D1DCEA-8C15-4BE8-A28A-76A679F1D08A",
+          "line1" : "Trove",
+          "line2" : "[Headline]",
+          "look" : "accent",
+          "showIcon" : true,
+          "subhead" : "[One line about the app]"
+        },
+        {
+          "id" : "64763089-3415-4E92-AE81-651CB98AB928",
+          "line1" : "[Feature]",
+          "line2" : "[in a few words.]",
+          "look" : "tint",
+          "showIcon" : false,
+          "subhead" : ""
+        },
+        {
+          "id" : "20468AFB-E393-4885-BF72-46CDD66DE484",
+          "line1" : "[Feature]",
+          "line2" : "[in a few words.]",
+          "look" : "tint",
+          "showIcon" : false,
+          "subhead" : ""
+        }
+      ],
+      "layerGroups" : [
+
+      ],
+      "linked" : [
+        true,
+        false
+      ],
+      "publish" : false
+    },
+    "ipad" : {
+      "captures" : [
+
+      ],
+      "devices" : [
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "6FA9D5E1-08FF-446E-BA28-F36507C4887E",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-d9393411",
+          "rotation" : 0,
+          "scale" : 1.329356931626691,
+          "shadow" : true,
+          "x" : 419,
+          "y" : 765
+        },
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "90AF391B-2A36-4B12-8749-5DFE8EC23511",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-261559ba",
+          "rotation" : 0,
+          "scale" : 1.3029918214678682,
+          "shadow" : true,
+          "x" : 4209,
+          "y" : 610
+        },
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "D4949212-BB03-4BAB-828C-D34484BAE5E6",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-d9393411",
+          "rotation" : 0,
+          "scale" : 1.4471402955943038,
+          "shadow" : true,
+          "x" : 1876,
+          "y" : 608
+        }
+      ],
+      "frames" : [
+        {
+          "id" : "9B6FBCB0-7A49-4C9E-9C9F-A1EC02E9C8BF",
+          "line1" : "Trove",
+          "line2" : "[Headline]",
+          "look" : "accent",
+          "showIcon" : true,
+          "subhead" : "[One line about the app]"
+        },
+        {
+          "id" : "B6110923-2C94-4CAA-A65F-1B0778503DD1",
+          "line1" : "[Feature]",
+          "line2" : "[in a few words.]",
+          "look" : "tint",
+          "showIcon" : false,
+          "subhead" : ""
+        },
+        {
+          "id" : "097BE958-D575-4888-BCE8-E2C286353F77",
+          "line1" : "[Feature]",
+          "line2" : "[in a few words.]",
+          "look" : "tint",
+          "showIcon" : false,
+          "subhead" : ""
+        }
+      ],
+      "layerGroups" : [
+
+      ],
+      "linked" : [
+        true,
+        false
+      ],
+      "publish" : false
+    },
+    "iphone" : {
+      "captures" : [
+
+      ],
+      "devices" : [
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "CF82DFAC-86B3-424C-999D-9706DFA0800C",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-f6bcd037",
+          "rotation" : 0,
+          "scale" : 1.85,
+          "shadow" : true,
+          "x" : 787,
+          "y" : 746
+        },
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "E7C5862C-DDC5-4C0C-8EF6-12A053936DCA",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-f6bcd037",
+          "rotation" : 0,
+          "scale" : 1.85,
+          "shadow" : true,
+          "x" : -188,
+          "y" : 732
+        },
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "7DC4D366-A253-48CD-BA0A-2654A921EACF",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-041fceb4",
+          "rotation" : 0,
+          "scale" : 1,
+          "shadow" : true,
+          "x" : 2778,
+          "y" : 617
+        },
+        {
+          "aspect" : 1,
+          "baseWidth" : 0,
+          "capture" : "",
+          "flipped" : false,
+          "hidden" : false,
+          "id" : "0CEAFEE7-3D6B-4880-AB16-9DA97C8A3866",
+          "imagePath" : "",
+          "kind" : "device",
+          "locked" : false,
+          "name" : "",
+          "opacity" : 1,
+          "renderID" : "render-4d02fad1",
+          "rotation" : 0,
+          "scale" : 1,
+          "shadow" : true,
+          "x" : 4098,
+          "y" : 484
+        }
+      ],
+      "frames" : [
+        {
+          "id" : "E18F372A-66BD-4DCC-BE72-41EB12A68CC4",
+          "line1" : "Trove",
+          "line2" : "[Headline]",
+          "look" : "accent",
+          "showIcon" : true,
+          "subhead" : "[One line about the app]"
+        },
+        {
+          "id" : "6233F788-8D89-47FF-9870-8A59A50EB8F1",
+          "line1" : "[Feature]",
+          "line2" : "[in a few words.]",
+          "look" : "tint",
+          "showIcon" : false,
+          "subhead" : ""
+        },
+        {
+          "id" : "6C4AE09D-331D-4368-9812-99AAE4B7969F",
+          "line1" : "[Feature]",
+          "line2" : "[in a few words.]",
+          "look" : "tint",
+          "showIcon" : false,
+          "subhead" : ""
+        },
+        {
+          "id" : "084FD9DB-0019-4B27-A0EC-C5DD44529768",
+          "line1" : "[Headline]",
+          "line2" : "[Second line]",
+          "look" : "tint",
+          "showIcon" : false,
+          "subhead" : ""
+        }
+      ],
+      "layerGroups" : [
+
+      ],
+      "linked" : [
+        true,
+        false,
+        false
+      ],
+      "publish" : true
+    },
+    "watch" : {
+      "captures" : [
+
+      ],
+      "devices" : [
+
+      ],
+      "frames" : [
+
+      ],
+      "layerGroups" : [
+
+      ],
+      "linked" : [
+
+      ],
+      "publish" : false
+    }
+  },
+  "tintHex" : ""
+}
